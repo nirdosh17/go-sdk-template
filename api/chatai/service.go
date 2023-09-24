@@ -42,14 +42,20 @@ type Question struct {
 // AskAIWithContext provides answer for input question from ChatAI service.
 func (c *ChatAPI) AskAIWithContext(ctx context.Context, question string) (AIAnswer, error) {
 	var answer AIAnswer
+
+	// blank answer for blank question
+	if question == "" {
+		return answer, nil
+	}
+
 	if len(question) > MaxInputLength {
-		return answer, &ErrInputSizeLimitExceeded
+		return answer, ErrInputSizeLimitExceeded
 	}
 
 	// configure HTTP client
 	url := c.Config.Endpoint + "/" + ServiceName
 
-	req := client.Request{Client: c.Config.HTTPClient}
+	req := client.Request{Client: c.Config.HTTPClient, Logger: c.Config.Logger, Debug: c.Config.Debug}
 	q := Question{Query: question}
 
 	err := c.Config.Retryer.Run(ctx, func(ctx context.Context) error {

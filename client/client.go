@@ -9,9 +9,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 	"time"
 
 	"github.com/nirdosh17/go-sdk-template/apierror"
+	"github.com/nirdosh17/go-sdk-template/logger"
 )
 
 const (
@@ -24,6 +26,9 @@ type Requester interface {
 
 type Request struct {
 	Client *http.Client
+	Logger logger.Logger
+	// Debug is flag to activate verbose mode. It prints out http request and response objects if set to true.
+	Debug bool
 }
 
 // TODO: rename to default request
@@ -53,11 +58,25 @@ func (r *Request) Perform(ctx context.Context, url string, method string, reques
 		return apierror.ErrInvalidRequestBody.Record(err)
 	}
 
+	if r.Debug {
+		dump, dErr := httputil.DumpRequestOut(request, true)
+		if dErr == nil {
+			r.Logger.Log(fmt.Sprintf("HTTP request dump:\n%s\n", string(dump)))
+		}
+	}
+
 	resp, err := r.Client.Do(request)
 	if err != nil {
 		return apierror.ErrSDK.Record(fmt.Errorf("api request failure: %w", err))
 	}
 	defer resp.Body.Close()
+
+	if r.Debug {
+		dump, dErr := httputil.DumpResponse(resp, true)
+		if dErr == nil {
+			r.Logger.Log(fmt.Sprintf("HTTP response dump:\n%s\n", string(dump)))
+		}
+	}
 
 	status := resp.StatusCode
 	if status >= 500 {
