@@ -1,5 +1,3 @@
-// this file contains errors related to chatai service only
-
 package chatai
 
 import (

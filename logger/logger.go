@@ -1,3 +1,6 @@
+// Package logger provides the logging interface.
+//
+// Default logger can be overridden with a custom logger in the Config object.
 package logger
 
 import (
