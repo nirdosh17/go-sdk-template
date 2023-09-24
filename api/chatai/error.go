@@ -2,11 +2,13 @@
 
 package chatai
 
-import "github.com/nirdosh17/go-sdk-template/apierror"
+import (
+	"fmt"
+
+	"github.com/nirdosh17/go-sdk-template/apierror"
+)
 
 var (
-	// ErrInputSizeLimitExceeded represents error code InputSizeLimitExceeded.
-	//
-	// Input string character size has exceeded. Try a smaller input string.
-	ErrInputSizeLimitExceeded = apierror.XCloudErr{ErrCode: "INPUT_SIZE_EXCEEDED", Message: "max input size for question field is 200 characters"}
+	// ErrInputSizeLimitExceeded represents error where user's input is larger than specified limit.
+	ErrInputSizeLimitExceeded = apierror.New("INPUT_SIZE_EXCEEDED", fmt.Errorf("input size exceeded the limit of %d characters", MaxInputLength))
 )

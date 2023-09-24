@@ -43,36 +43,36 @@ func (r *Request) Perform(ctx context.Context, url string, method string, reques
 	if requestBody != nil {
 		b, err := json.Marshal(requestBody)
 		if err != nil {
-			return apierror.ErrInvalidRequestBody.Record("input marshaling failed", err)
+			return apierror.ErrInvalidRequestBody.Record(fmt.Errorf("serialization failure: %v", err))
 		}
 		toSend = bytes.NewBuffer(b)
 	}
 
 	request, err := http.NewRequestWithContext(ctx, method, url, toSend)
 	if err != nil {
-		return apierror.ErrInvalidRequestBody.Record("", err)
+		return apierror.ErrInvalidRequestBody.Record(err)
 	}
 
 	resp, err := r.Client.Do(request)
 	if err != nil {
-		return apierror.ErrInternalServer.Record("api request failed", err)
+		return apierror.ErrSDK.Record(fmt.Errorf("api request failure: %w", err))
 	}
 	defer resp.Body.Close()
 
 	status := resp.StatusCode
 	if status >= 500 {
-		return apierror.ErrInternalServer.Record("", fmt.Errorf("status code %d", status))
+		return &apierror.ErrInternalServer
 	}
 
 	respBytes, err = io.ReadAll(resp.Body)
 	if err != nil {
-		return apierror.ErrSDK.Record("failed reading response body", err)
+		return apierror.ErrSDK.Record(fmt.Errorf("failed reading response body: %w", err))
 	}
 
 	if target != nil {
 		err = json.Unmarshal(respBytes, target)
 		if err != nil {
-			return apierror.ErrSDK.Record("failed un-marshaling response body", err)
+			return apierror.ErrSDK.Record(fmt.Errorf("response de-serialization err: %w", err))
 		}
 	}
 
@@ -80,9 +80,9 @@ func (r *Request) Perform(ctx context.Context, url string, method string, reques
 	case status >= 200 && status < 300:
 		return nil
 	case status >= 400 && status < 500:
-		return apierror.ErrInvalidRequestBody.Record("", fmt.Errorf("server response: %v", string(respBytes)))
+		return apierror.ErrInvalidRequestBody.Record(fmt.Errorf("server response: %v", string(respBytes)))
 	default:
 		// 3XX not handled
-		return apierror.ErrUnhandled.Record("unhandled status code", fmt.Errorf("server error %d", status))
+		return apierror.ErrUnhandled.Record(fmt.Errorf("server error %d", status))
 	}
 }
