@@ -28,6 +28,7 @@ type Requester interface {
 
 type Request struct {
 	Client Client
+	APIKey string
 	Logger logger.Logger
 	// Debug flag activates verbose mode. It prints out http request and response objects if set to true.
 	Debug bool
@@ -59,7 +60,7 @@ func (r *Request) Perform(ctx context.Context, url string, method string, reques
 	if err != nil {
 		return apierror.ErrInvalidRequestBody.Record(err)
 	}
-
+	request.Header.Add("x-api-key", r.APIKey)
 	if r.Debug {
 		dump, dErr := httputil.DumpRequestOut(request, true)
 		if dErr == nil {

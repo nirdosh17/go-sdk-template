@@ -18,7 +18,7 @@ import (
 
 func Example() {
 	// with default configs
-	ai := chatai.NewService(config.NewConfig())
+	ai := chatai.NewService(config.NewConfig("apiKey"))
 	ans, err := ai.AskAI("tell me one memory optimization technique in Go")
 	if err != nil {
 		// handle err
@@ -33,7 +33,7 @@ func ExampleChatAPI_AskAI() {
 		JSONBody:   &json,
 		StatusCode: 200,
 	}
-	ai := chatai.NewService(config.NewConfig().WithHTTPClient(&c))
+	ai := chatai.NewService(config.NewConfig("apiKey").WithHTTPClient(&c))
 
 	ans, err := ai.AskAI("memory optimization technique in Go")
 	if err != nil {
@@ -50,7 +50,7 @@ func ExampleChatAPI_AskAI_inputError() {
 		JSONBody:   &json,
 		StatusCode: 200,
 	}
-	ai := chatai.NewService(config.NewConfig().WithHTTPClient(&c))
+	ai := chatai.NewService(config.NewConfig("apiKey").WithHTTPClient(&c))
 
 	input := strings.Repeat("a very large question ", 50)
 	_, err := ai.AskAI(input)
@@ -69,7 +69,7 @@ func ExampleChatAPI_AskAIWithContext() {
 		JSONBody:   &json,
 		StatusCode: 200,
 	}
-	ai := chatai.NewService(config.NewConfig().WithHTTPClient(&c))
+	ai := chatai.NewService(config.NewConfig("apiKey").WithHTTPClient(&c))
 
 	ctx, _ := context.WithTimeout(context.Background(), 20*time.Second)
 	ans, err := ai.AskAIWithContext(ctx, "When will the world end?")
@@ -91,7 +91,7 @@ func ExampleChatAPI_AskAIWithContext_withAdditionalConfigs() {
 	customClient := &http.Client{Transport: transport, Timeout: 10 * time.Second}
 
 	// config object with custom settings
-	config := config.NewConfig().
+	config := config.NewConfig("apiKey").
 		WithHTTPClient(customClient).
 		WithMaxRetries(3)
 

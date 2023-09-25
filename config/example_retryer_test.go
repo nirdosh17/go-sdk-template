@@ -26,7 +26,7 @@ func (r *CustomRetry) SetMaxRetries(n int) {
 // ExampleConfig_WithRetryer shows how a custom retry function can be created and passed in the config object.
 func ExampleConfig_WithRetryer() {
 	retryer := CustomRetry{MaxRetries: 3}
-	c := config.NewConfig().WithRetryer(&retryer)
+	c := config.NewConfig("apiKey").WithRetryer(&retryer)
 
 	s := chatai.NewService(c)
 	s.AskAI("some question")

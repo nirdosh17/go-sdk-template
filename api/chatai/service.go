@@ -23,7 +23,7 @@ type ChatAPI struct {
 // Example:
 //
 //	// with default configs
-//	ai := chatai.New(api.NewConfig())
+//	ai := chatai.New(api.NewConfig("apiKey"))
 //
 //	// With custom configs:
 //	ai := chatai.NewService(
@@ -53,7 +53,7 @@ func (c *ChatAPI) AskAIWithContext(ctx context.Context, input string) (model.AIA
 	// configure HTTP client
 	url := c.Config.Endpoint + "/" + serviceName
 
-	req := client.Request{Client: c.Config.HTTPClient, Logger: c.Config.Logger, Debug: c.Config.Debug}
+	req := client.Request{Client: c.Config.HTTPClient, Logger: c.Config.Logger, Debug: c.Config.Debug, APIKey: c.Config.APIKey}
 	q := question{query: input}
 
 	err := c.Config.Retryer.Run(ctx, func(ctx context.Context) error {
