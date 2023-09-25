@@ -13,6 +13,9 @@ var (
 	// ErrInternalServer represents error where server has failed to process the request.
 	ErrInternalServer = APIError{ErrCode: "INTERNAL_SERVER_ERROR", Err: errors.New("server failed")}
 
+	// ErrResponseDeserialization represents error where SDK fails to unmarshal response as JSON.
+	ErrResponseDeserialization = APIError{ErrCode: "RESPONSE_DESERIALIZATION_ERROR"}
+
 	// ErrSDK represents local errors which occurred before making call to the server.
 	ErrSDK = APIError{ErrCode: "SDK_ERROR"}
 

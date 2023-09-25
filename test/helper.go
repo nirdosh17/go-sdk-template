@@ -37,9 +37,12 @@ func ExpectSameType(t *testing.T, field string, expected, received interface{}) 
 
 // MockHTTPClient mocks http client for testing. It satisfies client.HTTPClient interface.
 type MockHTTPClient struct {
-	JSONBody   *string
+	// send body which you want to receive in the response
+	JSONBody *string
+	// response status code
 	StatusCode int
-	Err        error
+	// returns error if provided
+	Err error
 }
 
 func (c *MockHTTPClient) Do(r *http.Request) (*http.Response, error) {

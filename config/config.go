@@ -1,6 +1,4 @@
-// Package config provides main configuration object to initialize the apis. The config object is used while creating new services.
-//
-// long description with examples
+// Package config provides main configuration object which is used in the service APIs.
 package config
 
 import (

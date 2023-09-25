@@ -1,4 +1,4 @@
-run-tests:
+tests:
 	go test ./... -cover
 
 doc:

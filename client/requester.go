@@ -1,5 +1,6 @@
-// Package client package provides interface to perform api call to external services.
-
+// Package client provides interface to perform api call to external services.
+//
+// It also provides the retryer interface which can be overridden with our own function.
 package client
 
 import (
@@ -17,6 +18,7 @@ import (
 )
 
 const (
+	// DefaultHTTPTimeout expires requests after this period unless overridden by a context.
 	DefaultHTTPTimeout = 30 * time.Second
 )
 
@@ -27,7 +29,7 @@ type Requester interface {
 type Request struct {
 	Client Client
 	Logger logger.Logger
-	// Debug is flag to activate verbose mode. It prints out http request and response objects if set to true.
+	// Debug flag activates verbose mode. It prints out http request and response objects if set to true.
 	Debug bool
 }
 
@@ -41,7 +43,7 @@ func DefaultClient() Client {
 // Response from server will be deserialized to "target" interface.
 func (r *Request) Perform(ctx context.Context, url string, method string, requestBody interface{}, target interface{}) error {
 	var (
-		toSend    *bytes.Buffer
+		toSend    *bytes.Buffer = &bytes.Buffer{}
 		respBytes []byte
 	)
 
@@ -91,7 +93,7 @@ func (r *Request) Perform(ctx context.Context, url string, method string, reques
 	if target != nil {
 		err = json.Unmarshal(respBytes, target)
 		if err != nil {
-			return apierror.ErrSDK.Record(fmt.Errorf("response de-serialization err: %w", err))
+			return apierror.ErrResponseDeserialization.Record(err)
 		}
 	}
 
