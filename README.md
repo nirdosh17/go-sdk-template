@@ -7,22 +7,20 @@ We offer a service called `ChatAI` at the moment but our company can grow in fut
 
 The sample SDK contains most common features which are important for production readiness.
 ### Features
-- Authorization
-  - Auth is server's responsibility. SDK only injects auth header in the request.
-- Able pass `context` while making request
-- Configurable HTTP Timeout
-- Able to use custom HTTP client for fine grain control (e.g. proxy settings)
-- Custom errors/codes instead of plain text
+- Authentication:
+  - Injects credentials while making API requests, rest is server's responsibility.
+- Allows to use `context` while making request. timeouts and cancellations can be handled via this.
+- Custom HTTP client can be used for fine grain control (e.g. proxy settings)
+- Return custom error instead of plain text
 - Retry mechanism
   - Implements fixed interval based retry
-  - Configurable max retries
-  - Able to overwrite default retry behavior with custom retry function. Can be useful to implement different strategies like exponential backoff
+  - Max retries can be configured
+  - Custom retry function can be used to implement different strategies
 - Input Validator [Not implemented]
-- Versioning
-  - Git tags are good for a single service but if your library has multiple services then package level segregation can be done as shown below:
-    - `/api/chatai/v1`
-    - `/api/texttoimage/v1`
-- Tests [In-progress]
+- Logging:
+  - option to enabled verbose logging via `config.Debug` flag
+  - Able to use custom logger
+- Tests
 
 ## SDK Structure
 ```

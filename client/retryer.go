@@ -6,8 +6,9 @@ import (
 )
 
 const (
+	// DefaultRetryDelay is the time to wait between two retries.
 	DefaultRetryDelay = 2 * time.Second
-	DefaultMaxRetries = 5
+	DefaultMaxRetries = 3
 )
 
 type Retryer interface {
