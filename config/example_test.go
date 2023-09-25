@@ -7,9 +7,9 @@ import (
 
 func Example() {
 	// use this for default working config
-	// c := config.NewConfig()
+	// c := config.NewConfig("apiKey")
 
-	c := config.NewConfig().
+	c := config.NewConfig("apiKey").
 		WithMaxRetries(5).
 		WithEndpoint("https://region2.serviceapi.com")
 

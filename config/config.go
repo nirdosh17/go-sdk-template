@@ -11,6 +11,8 @@ const (
 )
 
 type Config struct {
+	// APIKey is required to make authenticated requests to the server. Generate APIKey from developer settings.
+	APIKey string
 	// Endpoint is optional URL that overrides default service endpoint.
 	// Some services offer regional endpoints which you can choose based on proximity for minimal latency.
 	Endpoint string
@@ -27,14 +29,21 @@ type Config struct {
 }
 
 // NewConfig return a instance of config with default settings.
-func NewConfig() *Config {
+func NewConfig(apiKey string) *Config {
 	return &Config{
+		APIKey:     apiKey,
 		HTTPClient: client.DefaultClient(),
 		Retryer:    client.DefaultRetryer(),
 		Endpoint:   apiBasePath,
 		Logger:     logger.NewDefaultLogger(),
 		Debug:      false,
 	}
+}
+
+// WithAPIKey is used to configure the API key.
+func (c *Config) WithAPIKey(k string) *Config {
+	c.APIKey = k
+	return c
 }
 
 // WithHTTPClient overrides default http client `http.DefaultClient`.
