@@ -11,6 +11,7 @@ import (
 
 	"github.com/nirdosh17/go-sdk-template/api/chatai"
 	"github.com/nirdosh17/go-sdk-template/config"
+	"github.com/nirdosh17/go-sdk-template/test"
 )
 
 func Example() {
@@ -34,14 +35,21 @@ func ExampleChatAPI_AskAI() {
 }
 
 func ExampleChatAPI_AskAIWithContext() {
-	ai := chatai.NewService(config.NewConfig())
+	json := `{"answer":"in 50 years","confidenceScore":80}`
+	c := test.MockHTTPClient{
+		JSONBody:   &json,
+		StatusCode: 200,
+	}
+	ai := chatai.NewService(config.NewConfig().WithHTTPClient(&c))
 
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 20*time.Second)
 	ans, err := ai.AskAIWithContext(ctx, "When will the world end?")
 	if err != nil {
-		// handle err
+		log.Println(err)
 	}
-	fmt.Println("Answer: ", ans.Answer, "Confidence score:", ans.ConfidenceScore)
+	fmt.Printf("Answer: %v | Confidence Score: %v", ans.Answer, ans.ConfidenceScore)
+	// Output:
+	// Answer: in 50 years | Confidence Score: 80
 }
 
 func ExampleChatAPI_AskAIWithContext_withAdditionalConfigs() {

@@ -31,7 +31,7 @@ type AIAnswer struct {
 //
 //	// With custom configs:
 //	ai := chatai.NewService(
-//		config.NewConfig().WithHTTPTimeout(5 * time.Second).WithMaxRetries(1),
+//		config.NewConfig().WithMaxRetries(3),
 //	)
 func NewService(c *config.Config) *ChatAPI {
 	return &ChatAPI{Config: c}

@@ -4,9 +4,6 @@
 package config
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/nirdosh17/go-sdk-template/client"
 	"github.com/nirdosh17/go-sdk-template/logger"
 )
@@ -20,9 +17,7 @@ type Config struct {
 	// Some services offer regional endpoints which you can choose based on proximity for minimal latency.
 	Endpoint string
 	// HTTP client to use while sending requests. Defaults to `http.DefaultClient`
-	HTTPClient *http.Client
-	// Default HTTP timeout can be overridden using this. Defaults to 30 seconds.
-	HTTPTimeout time.Duration
+	HTTPClient client.HTTPClient
 	// Retryer function
 	Retryer client.Retryer
 	// The maximum number of times a request will be retried before it is considered failed. Defaults to 3.
@@ -36,24 +31,17 @@ type Config struct {
 // NewConfig return a instance of config with default settings.
 func NewConfig() *Config {
 	return &Config{
-		HTTPClient:  client.DefaultClient(),
-		Retryer:     client.DefaultRetryer(),
-		HTTPTimeout: client.DefaultHTTPTimeout,
-		Endpoint:    apiBasePath,
-		Logger:      logger.NewDefaultLogger(),
-		Debug:       false,
+		HTTPClient: client.DefaultClient(),
+		Retryer:    client.DefaultRetryer(),
+		Endpoint:   apiBasePath,
+		Logger:     logger.NewDefaultLogger(),
+		Debug:      false,
 	}
 }
 
 // WithHTTPClient overrides default http client `http.DefaultClient`.
-func (c *Config) WithHTTPClient(hc *http.Client) *Config {
+func (c *Config) WithHTTPClient(hc client.Client) *Config {
 	c.HTTPClient = hc
-	return c
-}
-
-// WithHTTPTimeout overrides default timeout duration `client.DefaultHTTPTimeout`.
-func (c *Config) WithHTTPTimeout(t time.Duration) *Config {
-	c.HTTPClient.Timeout = t
 	return c
 }
 

@@ -9,8 +9,7 @@ The sample SDK contains most common features which are important for production 
 ### Features
 - Authentication:
   - Injects credentials while making API requests, rest is server's responsibility.
-- Allows to use `context` while making request
-- Configurable HTTP Timeout
+- Allows to use `context` while making request. timeouts and cancellations can be handled via this.
 - Custom HTTP client can be used for fine grain control (e.g. proxy settings)
 - Return custom error instead of plain text
 - Retry mechanism
@@ -21,7 +20,7 @@ The sample SDK contains most common features which are important for production 
 - Logging:
   - option to enabled verbose logging via `config.Debug` flag
   - Able to use custom logger
-- Tests [In-progress]
+- Tests
 
 ## SDK Structure
 ```

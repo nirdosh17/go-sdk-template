@@ -6,13 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nirdosh17/go-sdk-template/client"
 	"github.com/nirdosh17/go-sdk-template/test"
 )
 
 func TestConfig_NewConfig(t *testing.T) {
 	c := NewConfig()
-	test.ExpectEqual(t, "HTTPTimeout", client.DefaultHTTPTimeout, c.HTTPTimeout)
 	test.ExpectNotNil(t, "HTTPClient", c.HTTPClient)
 	test.ExpectNotNil(t, "Retryer", c.Retryer)
 	test.ExpectEqual(t, "Endpoint", apiBasePath, c.Endpoint)
@@ -23,14 +21,7 @@ func TestConfig_WithHTTPClient(t *testing.T) {
 	to := 60 * time.Second
 	custom := http.Client{Timeout: to}
 	config.WithHTTPClient(&custom)
-	test.ExpectEqual(t, "HTTPClient timeout", to, config.HTTPClient.Timeout)
-}
-
-func TestConfig_WithHTTPTimeout(t *testing.T) {
-	config := NewConfig()
-	to := 60 * time.Second
-	config.WithHTTPTimeout(to)
-	test.ExpectEqual(t, "HTTPClient timeout", to, config.HTTPClient.Timeout)
+	test.ExpectEqual(t, "HTTPClient", &custom, config.HTTPClient)
 }
 
 func TestConfig_WithEndpoint(t *testing.T) {

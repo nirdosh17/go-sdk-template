@@ -25,14 +25,14 @@ type Requester interface {
 }
 
 type Request struct {
-	Client *http.Client
+	Client Client
 	Logger logger.Logger
 	// Debug is flag to activate verbose mode. It prints out http request and response objects if set to true.
 	Debug bool
 }
 
-// TODO: rename to default request
-func DefaultClient() *http.Client {
+// DefaultClient returns a HTTP client with default timeout.
+func DefaultClient() Client {
 	return &http.Client{Timeout: DefaultHTTPTimeout}
 }
 

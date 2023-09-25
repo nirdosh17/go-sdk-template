@@ -1,8 +1,6 @@
 package config_test
 
 import (
-	"time"
-
 	"github.com/nirdosh17/go-sdk-template/api/chatai"
 	"github.com/nirdosh17/go-sdk-template/config"
 )
@@ -12,7 +10,6 @@ func Example() {
 	// c := config.NewConfig()
 
 	c := config.NewConfig().
-		WithHTTPTimeout(2 * time.Second).
 		WithMaxRetries(5).
 		WithEndpoint("https://region2.serviceapi.com")
 
